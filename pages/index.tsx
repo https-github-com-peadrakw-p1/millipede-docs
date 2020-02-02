@@ -20,8 +20,14 @@ import TopicsHead from '../src/components/site/landing/TopicsHead';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
+    // root: {
+    //   flex: '1 1 100%'
+    // },
     root: {
-      flex: '1 1 100%'
+      flex: '1 0 100%',
+      '& #main-content': {
+        outline: 0
+      }
     },
     drawer: {
       width: 0
@@ -30,6 +36,7 @@ const useStyles = makeStyles((theme: Theme) =>
       paddingTop: 64,
       color: theme.palette.primary.main
     },
+
     content: {
       display: 'flex',
       flexDirection: 'column',
@@ -77,57 +84,51 @@ const Index = () => {
   return (
     <AppFrame drawerStyleOverride={{ drawer: classes.drawer }}>
       <div className={classes.root}>
-        {/* <Head /> */}
-        <div className={classes.hero}>
-          <Container maxWidth='md' className={classes.content}>
-            <div
-            // className={classes.header}
-            >
-              <Typography
-                variant='h3'
-                component='h1'
-                color='inherit'
-                gutterBottom
-                className={classes.title}
+        <main id='main-content' tabIndex={-1}>
+          {/* <Head /> */}
+          <div className={classes.hero}>
+            <Container maxWidth='md' className={classes.content}>
+              <div
+              // className={classes.header}
               >
-                {t('application-title')}
-              </Typography>
-              <Typography
-                variant='h4'
-                component='h1'
-                color='inherit'
-                gutterBottom
-                className={classes.subtitle}
-              >
-                {t('application-subtitle')}
-              </Typography>
-              <Typography
-                variant='h5'
-                component='h2'
-                color='inherit'
-                gutterBottom
-                className={classes.subtitle}
-              >
-                {t('application-sub-subtitle')}
-              </Typography>
-            </div>
-            <Divider />
-
-            <TopicsHead />
-            <TopicsDetail />
-
-            <HomeFooter />
-          </Container>
-        </div>
+                <Typography
+                  variant='h3'
+                  component='h1'
+                  color='inherit'
+                  gutterBottom
+                  className={classes.title}
+                >
+                  {t('application-title')}
+                </Typography>
+                <Typography
+                  variant='h4'
+                  component='h1'
+                  color='inherit'
+                  gutterBottom
+                  className={classes.subtitle}
+                >
+                  {t('application-subtitle')}
+                </Typography>
+                <Typography
+                  variant='h5'
+                  component='h2'
+                  color='inherit'
+                  gutterBottom
+                  className={classes.subtitle}
+                >
+                  {t('application-sub-subtitle')}
+                </Typography>
+              </div>
+              <Divider />
+              <TopicsHead />
+              <TopicsDetail />
+              <HomeFooter />
+            </Container>
+          </div>
+        </main>
       </div>
     </AppFrame>
   );
-};
-
-Index.getInitialProps = async () => {
-  return {
-    namespacesRequired: ['common']
-  };
 };
 
 export default Index;

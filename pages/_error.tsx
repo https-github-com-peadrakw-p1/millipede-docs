@@ -1,19 +1,22 @@
 import React from 'react';
-import { useTranslation, WithTranslation } from 'react-i18next';
+
+import { useTranslation } from '../i18n';
 
 interface ErrorProps {
   statusCode?: number;
 }
 
-type Props = ErrorProps & WithTranslation;
-
-// const Error = ({ statusCode, t }: Props) => {
-//   return <p>{statusCode ? t('error-with-status', { statusCode }) : t('error-without-status')}</p>;
-// };
+type Props = ErrorProps;
 
 const Error = ({ statusCode }: Props) => {
   const { t } = useTranslation();
-  return <p>{statusCode ? t('error-with-status', { statusCode }) : t('error-without-status')}</p>;
+  return (
+    <p>
+      {statusCode
+        ? t('error-with-status', { statusCode })
+        : t('error-without-status')}
+    </p>
+  );
 };
 
 Error.getInitialProps = async ({ res, err }) => {

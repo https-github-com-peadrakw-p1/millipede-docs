@@ -1,18 +1,41 @@
-import { IconButton } from '@material-ui/core';
-import Grid from '@material-ui/core/Grid';
+import { Button, Container as MUIContainer } from '@material-ui/core';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import _ from 'lodash';
 import { TFunction } from 'next-i18next-serverless';
-import { useRouter } from 'next/router';
-import React from 'react';
-import { WithTranslation } from 'react-i18next';
+import React, { useState } from 'react';
+import styled from 'styled-components';
 
-import CustomIcon from '../../../../docs/src/modules/components/icon/CustomIcon';
-import { withTranslation } from '../../../../i18n';
+import { useTranslation } from '../../../../i18n';
 import { OverviewProps } from '../../../typings/data/import';
 import { TopReveal } from '../../animation/framer/components/text/TopReveal';
+import FullScreenInterface from '../../interface/FullScreenInterfaceByComponent';
 
-const useStyles = makeStyles((_theme: Theme) =>
+// import Grid from '@material-ui/core/Grid';
+export const Container = styled('div')`
+  position: relative;
+  /* height: 480px; */
+  overflow: hidden;
+  background: white;
+  /* animation: fadeFromBlack 0s; */
+  /* @keyframes fadeFromBlack {
+    0% {
+      filter: brightness(0);
+    }
+  } */
+`;
+
+/** Prevents the user from scrolling the display with a mouse. */
+
+export const Mask = styled('div')`
+  /* z-index: 100; */
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+`;
+
+export const useStyles = makeStyles((_theme: Theme) =>
   createStyles({
     root: {
       marginTop: '48px'
@@ -28,59 +51,101 @@ const generateTopics = (t: TFunction): Array<OverviewProps> => {
   return [];
 };
 
-const renderTopics = (topics: Array<OverviewProps>) => {
-  const router = useRouter();
-  return (
-    <>
-      {topics.length > 0
-        ? topics.map((topic, index) => {
-            return (
-              <Grid key={index} item xs={12} md={6}>
-                <TopReveal
-                  id={`animation-${index}`}
-                  text={[...topic.title, ...topic.subTitle]}
-                />
-                {topic.contextLink
-                  ? topic.contextLink.perspectives.map(perspective => {
-                      return (
-                        <IconButton
-                          onClick={() => {
-                            router.push(
-                              `${router.pathname}?${perspective.type}=${topic.contextLink.id}#${topic.contextLink.id}`
-                            );
-                          }}
-                        >
-                          <CustomIcon icon={perspective.icon} />
-                        </IconButton>
-                      );
-                    })
-                  : null}
-              </Grid>
-            );
-          })
-        : null}
-    </>
-  );
+export const renderTopics = (
+  topics: Array<OverviewProps>,
+  outerIndex: number
+) => {
+  return topics.length > 0
+    ? topics.map((topic, index) => {
+        return (
+          <TopReveal
+            id={`animation-${index}`}
+            text={[...topic.title, ...topic.subTitle]}
+            outerIndex={outerIndex}
+          />
+        );
+      })
+    : null;
 };
 
-type Props = WithTranslation;
+const ns = 'pages/topics/index';
 
-const TopicsHead = ({ t }: Props) => {
-  const classes = useStyles({});
+const TopicsHead = () => {
+  const { t } = useTranslation(ns);
+
+  // const classes = useStyles({});
+
+  const [outerIndex, setOuterIndex] = useState(0);
 
   const topics = generateTopics(t);
 
+  // return (
+  //   <MUIContainer style={{ margin: '32px' }}>
+  //     {/* <MUIContainer style={{ paddingLeft: '0px', paddingRight: '0px' }}> */}
+  //     <Container>
+  //       <Mask />
+  //       <FullScreenInterface
+  //         windowStackData={topics || []}
+  //         index={outerIndex}
+  //       />
+  //     </Container>
+  //     <div style={{ display: 'flex' }}>
+  //       <Button
+  //         onClick={() => {
+  //           setOuterIndex(0);
+  //         }}
+  //       >
+  //         set to 0
+  //       </Button>
+
+  //       <Button
+  //         onClick={() => {
+  //           setOuterIndex(1);
+  //         }}
+  //       >
+  //         set to 1
+  //       </Button>
+  //     </div>
+  //   </MUIContainer>
+  // );
+
   return (
-    <Grid container className={classes.root} spacing={6}>
-      {renderTopics(topics)}
-    </Grid>
+    <MUIContainer style={{ paddingLeft: '0px', paddingRight: '0px' }}>
+      <Container>
+        <Mask />
+        <FullScreenInterface
+          windowStackData={topics || []}
+          index={outerIndex}
+        />
+      </Container>
+
+      <MUIContainer style={{ paddingLeft: '0px', paddingRight: '0px' }}>
+        <Button
+          onClick={() => {
+            setOuterIndex(0);
+          }}
+        >
+          set to 0
+        </Button>
+
+        <Button
+          onClick={() => {
+            setOuterIndex(1);
+          }}
+        >
+          set to 1
+        </Button>
+
+        <Button
+          onClick={() => {
+            setOuterIndex(2);
+          }}
+        >
+          set to 2
+        </Button>
+      </MUIContainer>
+    </MUIContainer>
   );
 };
 
-TopicsHead.getInitialProps = async () => {
-  return {
-    namespacesRequired: ['pages/topics/index']
-  };
-};
-
-export default withTranslation('pages/topics/index')(TopicsHead);
+export default TopicsHead;
