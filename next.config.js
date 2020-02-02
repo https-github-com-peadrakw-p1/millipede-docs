@@ -22,7 +22,7 @@ const configuration = {
   target: 'serverless',
   pageExtensions: ['js', 'jsx', 'md', 'mdx', 'ts', 'tsx'],
   experimental: { modern: true, documentMiddleware: true },
-  serverRuntimeConfig: {
+  publicRuntimeConfig: {
     PROJECT_ROOT: __dirname
   }
 };
